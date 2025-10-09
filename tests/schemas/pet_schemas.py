@@ -18,7 +18,7 @@ PET_schema = {
             },
             },
             "required": ["id","name"],
-            "additionalProperties": False
+            "AdditionalProperties": False
         },
 
         "photoUrls": {
@@ -41,7 +41,7 @@ PET_schema = {
                         },
                     },
                     "required": ["id","name"],
-                    "additionalProperties": False
+                    "AdditionalProperties": False
 
                 }
             },
@@ -51,5 +51,5 @@ PET_schema = {
             },
         },
     "required":["id","name","photoUrls","status"],
-    "additionalProperties": False
+    "AdditionalProperties": False
 }

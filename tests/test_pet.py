@@ -42,9 +42,27 @@ class TestPet:
         with allure.step('Проверка текстового содержимого ответа'):
             assert response.text == 'Pet deleted', 'Текст ошибки не совпал с ожидаемым.'
 
-    @allure.title ("Попытка добавить несуществующего питомца")
-    def test_add_nonexistentpet(self):
-        with allure.step('Отправка запроса на добавление несуществующего питомца'):
+    @allure.title("Попытка добавить питомца только с обязательными полями")
+    def test_add_pet_required_fields(self):
+        with allure.step('Отправка запроса на добавление питомца'):
+            payload = {
+                "id": 10,
+                "name": "Buddy",
+                "status": "available"}
+            response = requests.post(url=f'{BASE_URL}/pet', json=payload)
+            response_json = response.json()
+
+        with allure.step('Проверка статуса ответа и валидация json-схемы'):
+            assert response.status_code == 200
+            jsonschema.validate(response.json(), PET_schema)
+
+        with allure.step("Проверка параметров питомца в ответе"):
+            assert response_json["id"] == payload['id'], "id питомца не совпал с ожидаемым"
+            assert response_json["name"] == payload['name'], "Имя питомца не совпал с ожидаемым"
+            assert response_json["status"] == payload['status'], "Статус питомца не совпал с ожидаемым"
+    @allure.title ("Попытка добавить питомца со всеми полями")
+    def test_add_pet_all_fields(self):
+        with allure.step('Отправка запроса на добавление питомца'):
             payload = {
                 "id": 1,
                 "name": "doggie",
