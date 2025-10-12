@@ -1,6 +1,5 @@
 import allure, requests, jsonschema
 
-from .conftest import update_pet
 from .schemas.pet_schemas import PET_schema
 
 BASE_URL='http://5.181.109.28:9090/api/v3'
