@@ -142,25 +142,25 @@ class TestPet:
             assert response_json["name"] == payload['name'], "Имя питомца не совпал с ожидаемым"
             assert response_json["status"] == payload['status'], "Статус питомца не совпал с ожидаемым"
 
-    @allure.title("Получение списка питомцев по статусу")
-    @pytest.mark.parametrize ("status, expected_status_code",
-                              [("available",200), ("sold",200)])
+    @allure.title("Получение списка питомцев по статусу при корректном статусе")
+    @pytest.mark.parametrize ("status, expected_status_code",[("available",200), ("sold",200)])
     def test_get_pets_by_status_positive(self,status,expected_status_code):
         with allure.step(f"Отправка запроса на получение питомцев по статусу {status}"):
-            response = requests.get(url=f'{BASE_URL}/pet/findByStatus', params={"status":status})
+                response = requests.get(url=f'{BASE_URL}/pet/findByStatus', params={"status":status})
 
-            with allure.step("Проверка статуса ответа"):
-                assert response.status_code == expected_status_code
-                assert isinstance(response.json(),list)
+        with allure.step("Проверка статуса ответа и формата данных"):
+            assert response.status_code == expected_status_code
+            assert isinstance(response.json(),list)
 
-    @pytest.mark.parametrize("status, expected_status_code",
-                                         [("unexpected_status", 400), ("", 400)])
+    @allure.title("Получение списка питомцев по статусу при некорректном статусе")
+    @pytest.mark.parametrize("status, expected_status_code", [("unexpected_status", 400), ("", 400)])
+
     def test_get_pets_by_status_negative(self,status,expected_status_code):
         with allure.step(f"Отправка запроса на получение питомцев по статусу {status}"):
             response = requests.get(url=f'{BASE_URL}/pet/findByStatus', params={"status":status})
 
-            with allure.step("Проверка статуса ответа"):
-                assert response.status_code == expected_status_code
+        with allure.step("Проверка статуса ответа и формата данных"):
+            assert response.status_code == expected_status_code
             assert isinstance(response.json(),dict)
 
 
