@@ -1,5 +1,7 @@
 import allure, requests, jsonschema
 
+from .schemas.store_schemas import Order_schema, Inventory_schema
+
 BASE_URL='http://5.181.109.28:9090/api/v3'
 @allure.feature('Store')
 class TestStore:
@@ -16,13 +18,14 @@ class TestStore:
             response = requests.post(url=f'{BASE_URL}/store/order', json=payload)
             response_json = response.json()
 
-        with allure.step("Проверка статуса ответа и данных о заказе"):
+        with allure.step("Проверка статуса ответа,данных о заказе, и валидация схемы"):
             assert response.status_code == 200, "Статус ответа не совпал с ожидаемым"
             assert response_json["id"] == payload['id'], "id заказа не совпал с ожидаемым"
             assert response_json["petId"] == payload['petId'], "id питомца не совпал с ожидаемым"
             assert response_json["quantity"] == payload['quantity'], "Количество не совпало с ожидаемым"
             assert response_json["status"] == payload['status'], "Статус заказа не совпал с ожидаемым"
             assert response_json["complete"] == payload['complete'], "Статус исполнения не совпал с ожидаемым"
+            jsonschema.validate(response.json(), Order_schema)
 
     @allure.title("Попытка получить данные о заказе")
     def test_get_order(self, create_order):
@@ -62,6 +65,6 @@ class TestStore:
         with allure.step("Отправка запроса на получение информации об инвентаре магазина"):
             response = requests.get(url=f'{BASE_URL}/store/inventory')
 
-        with allure.step("Проверка статуса ответа и типа данных"):
+        with allure.step("Проверка статуса ответа и валидация ответа"):
             assert response.status_code == 200, "Статус ответа не совпал с ожидаемым"
-            assert isinstance(response.json(), dict), "Тип данных не совпал с ожидаемым"
+            jsonschema.validate(response.json(), Inventory_schema), "Тип данных не совпал с ожидаемым"
