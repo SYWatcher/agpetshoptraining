@@ -67,4 +67,4 @@ class TestStore:
 
         with allure.step("Проверка статуса ответа и валидация ответа"):
             assert response.status_code == 200, "Статус ответа не совпал с ожидаемым"
-            jsonschema.validate(response.json(), Inventory_schema), "Тип данных не совпал с ожидаемым"
+            jsonschema.validate(response.json(), Inventory_schema)
