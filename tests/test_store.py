@@ -1,6 +1,8 @@
-import allure, requests, jsonschema
+import allure
+import requests
+import jsonschema
 
-from .schemas.store_schemas import Order_schema, Inventory_schema
+from .schemas.store_schemas import ORDER_SCHEMA, INVENTORY_SCHEMA
 
 BASE_URL='http://5.181.109.28:9090/api/v3'
 @allure.feature('Store')
@@ -25,7 +27,7 @@ class TestStore:
             assert response_json["quantity"] == payload['quantity'], "Количество не совпало с ожидаемым"
             assert response_json["status"] == payload['status'], "Статус заказа не совпал с ожидаемым"
             assert response_json["complete"] == payload['complete'], "Статус исполнения не совпал с ожидаемым"
-            jsonschema.validate(response.json(), Order_schema)
+            jsonschema.validate(response.json(), ORDER_SCHEMA)
 
     @allure.title("Попытка получить данные о заказе")
     def test_get_order(self, create_order):
@@ -67,4 +69,4 @@ class TestStore:
 
         with allure.step("Проверка статуса ответа и валидация ответа"):
             assert response.status_code == 200, "Статус ответа не совпал с ожидаемым"
-            jsonschema.validate(response.json(), Inventory_schema)
+            jsonschema.validate(response.json(), INVENTORY_SCHEMA)

@@ -1,4 +1,4 @@
-Order_schema = {
+ORDER_SCHEMA = {
     "type":"object",
     "properties":{
         "id":{
@@ -25,7 +25,7 @@ Order_schema = {
     "required":["id","petId","quantity","status","complete"],
     "AdditionalProperties": False
 }
-Inventory_schema = {
+INVENTORY_SCHEMA = {
     "type":"object",
     "properties":{
         "approved":{
